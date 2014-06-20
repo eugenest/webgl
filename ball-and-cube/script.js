@@ -1,13 +1,7 @@
 $(document).ready(function(){
     
-    var stats = new Stats();
-    stats.setMode(0); // 0: fps, 1: ms
-    
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0px';
-    stats.domElement.style.top = '0px';
-    
-    document.body.appendChild( stats.domElement ); 
+    var stats = initStats();
+    var controls = initControls();
     
     var scene = new THREE.Scene();
     
@@ -67,17 +61,36 @@ $(document).ready(function(){
     var step=0;
     function renderScene() {
         step+=0.04;
-        cube.rotation.x += 0.02;
-        cube.rotation.y += 0.02;
-        cube.rotation.z += 0.02;
-        spotLight.position.x += 0.2;
+        cube.rotation.x += controls.rotationSpeed;
+        cube.rotation.y += controls.rotationSpeed;
+        cube.rotation.z += controls.rotationSpeed;
+        spotLight.position.x += controls.sunPositionX;
+        spotLight.position.y += controls.sunPositionY;
+        spotLight.position.z += controls.sunPositionZ;
         
-        sphere.position.x = 20+( 10*(Math.cos(step)));
-        sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
+        sphere.position.x = 20+( controls.bouncingAmp*(Math.cos(step)));
+        sphere.position.y = 2 +( controls.bouncingAmp*Math.abs(Math.sin(step)));
         
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
         stats.update();
+    }
+    
+    function initControls(){
+        var controls = new function(){
+            this.rotationSpeed = 0.1;
+            this.bouncingAmp = 10;
+            this.sunPositionX = 0;
+            this.sunPositionY = 0;
+            this.sunPositionZ = 0;
+        };
+        var gui = new dat.GUI();
+        gui.add(controls, 'rotationSpeed', 0, 1);
+        gui.add(controls, 'bouncingAmp', 10, 20);
+        gui.add(controls, 'sunPositionX', -1,1);
+        gui.add(controls, 'sunPositionY', -1,1);
+        gui.add(controls, 'sunPositionZ', -1,1);
+        return controls;
     }
 }); 
     

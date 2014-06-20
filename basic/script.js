@@ -1,13 +1,7 @@
 $(document).ready(function(){
     
-    var stats = new Stats();
-    stats.setMode(0); // 0: fps, 1: ms
-    
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0px';
-    stats.domElement.style.top = '0px';
-    
-    document.body.appendChild( stats.domElement ); 
+    var stats = initStats();
+    var controls = initControls();
     
     var scene = new THREE.Scene();
     
@@ -44,7 +38,16 @@ $(document).ready(function(){
     function renderScene() {
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
+        cube.position.x += controls.positionX;
         stats.update();
     }
-}); 
     
+    function initControls(){
+        var controls = new function(){
+            this.positionX = 0;
+        };
+        var gui = new dat.GUI();
+        gui.add(controls, 'positionX', -1, 1);
+        return controls;
+    }
+});
