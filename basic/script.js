@@ -38,7 +38,7 @@ $(document).ready(function(){
     function renderScene() {
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
-        cube.position.x += controls.positionX;
+        cube.position.x = controls.positionX;
         stats.update();
     }
     
@@ -47,7 +47,7 @@ $(document).ready(function(){
             this.positionX = 0;
         };
         var gui = new dat.GUI();
-        gui.add(controls, 'positionX', -1, 1);
+        gui.add(controls, 'positionX', -30, 30);
         return controls;
     }
 });
